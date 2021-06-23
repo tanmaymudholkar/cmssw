@@ -4,7 +4,7 @@
   <use   name="GeneratorInterface/ExternalDecays"/>
   <flags   EDM_PLUGIN="1"/>
 </library>
-<library   file="Py*Gun.cc" name="GeneratorInterfacePythia8Guns">
+<library   file="Py*Gun*.cc" name="GeneratorInterfacePythia8Guns">
   <use   name="GeneratorInterface/ExternalDecays"/>
   <flags   EDM_PLUGIN="1"/>
 </library>

@@ -21,10 +21,12 @@ class Py8PtGunV2 : public Py8GunBase {
       // PtGun particle(s) characteristics
       double  fMinEta;
       double  fMaxEta;
-      double  fMinPt ;
-      double  fMaxPt ;
-      double  fMinMass ;
-      double  fMaxMass ;
+      // double  fMinPt ;
+      // double  fMaxPt ;
+      double fFixedPt;
+      // double  fMinMass ;
+      // double  fMaxMass ;
+      double  fFixedMass ;
       bool    fAddAntiParticle;
 
 };
@@ -40,10 +42,12 @@ Py8PtGunV2::Py8PtGunV2( edm::ParameterSet const& ps )
       ps.getParameter<edm::ParameterSet>("PGunParameters"); // , defpset ) ;
    fMinEta     = pgun_params.getParameter<double>("MinEta"); // ,-2.2);
    fMaxEta     = pgun_params.getParameter<double>("MaxEta"); // , 2.2);
-   fMinPt      = pgun_params.getParameter<double>("MinPt"); // ,  0.);
-   fMaxPt      = pgun_params.getParameter<double>("MaxPt"); // ,  0.);
-   fMinMass    = pgun_params.getParameter<double>("MinMass"); // ,  0.);
-   fMaxMass    = pgun_params.getParameter<double>("MaxMass"); // ,  0.);
+   // fMinPt      = pgun_params.getParameter<double>("MinPt"); // ,  0.);
+   // fMaxPt      = pgun_params.getParameter<double>("MaxPt"); // ,  0.);
+   // fMinMass    = pgun_params.getParameter<double>("MinMass"); // ,  0.);
+   // fMaxMass    = pgun_params.getParameter<double>("MaxMass"); // ,  0.);
+   fFixedPt    = pgun_params.getParameter<double>("FixedPt");
+   fFixedMass       = pgun_params.getParameter<double>("FixedMass"); // ,  0.);
    fAddAntiParticle = pgun_params.getParameter<bool>("AddAntiParticle"); //, false) ;
 
 }
@@ -59,14 +63,16 @@ bool Py8PtGunV2::generatePartonsAndHadronize()
       int particleID = fPartIDs[i]; // this is PDG - need to convert to Py8 ???
 
       // Define pt [GeV]
-      // See: https://stats.stackexchange.com/questions/234544/from-uniform-distribution-to-exponential-distribution-and-vice-versa
-      double a  = (fMaxPt-fMinPt)/(exp(1)-1);
-      double b  = (fMaxPt-fMinPt*exp(1))/(exp(1)-1);
-      double pt = a*exp(randomEngine().flat()) - b; // log decay in pt with low/high bound
-      //double pt = (fMaxPt-fMinPt) * randomEngine().flat() + fMinPt; // flat
+      // // See: https://stats.stackexchange.com/questions/234544/from-uniform-distribution-to-exponential-distribution-and-vice-versa
+      // double a  = (fMaxPt-fMinPt)/(exp(1)-1);
+      // double b  = (fMaxPt-fMinPt*exp(1))/(exp(1)-1);
+      // double pt = a*exp(randomEngine().flat()) - b; // log decay in pt with low/high bound
+      // //double pt = (fMaxPt-fMinPt) * randomEngine().flat() + fMinPt; // flat
+      double pt = fFixedPt;
 
       // Define mass [GeV]
-      double mass = log(1. + (randomEngine().flat())*(exp(fMaxMass)-1.) ); // exp growth in mass with high bound
+      // double mass = log(1. + (randomEngine().flat())*(exp(fMaxMass)-1.) ); // exp growth in mass with high bound
+      double mass = fFixedMass;
       /*
       //double mass = (fMaxMass-fMinMass) * randomEngine().flat() + fMinMass; // flat mass
       //double mass = (fMasterGen->particleData).m0( particleID ); // use SM default
